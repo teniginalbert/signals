@@ -5,3 +5,16 @@ ffmpeg.exe -loop 1 -r 60 -f image2 -i hd.png -i grig.mp3 -s 1920x1080 -vcodec li
 
 ffmpeg.exe -i hd_test.ts -i ueit.ts -map 0:0 -map 0:1 -map 1:0 -program program_num=1:title=HdTest:st=0:st=1 -program program_num=2:title=Ueit:st=2:st=3 -f mpegts out.ts
 
+
+ffmpeg.exe -i it.mp4 -codec:v copy -codec:a copy -streamid 0:50 -streamid 1:52 -bsf h264_mp4toannexb -f mpegts out_with_pids.ts
+
+
+ffmpeg.exe -loop 1 -f image2 -i it.png -f mp3 -i grig.mp3 -codec:v h264 -codec:a aac -s 1920x1080 -t 14 -crf 30 -r 60 -pix_fmt yuv420p it.264
+
+ffmpeg.exe -t it.264 -codec:v copy -codec:a copy -s 1920x1080 -t 14 -crf 30 -r 60 -pix_fmt yuv42-p it.mp4
+
+ffmpeg.exe -stream_loop -1 -i it.mp4 -codec:v copy -codec:a copy -streamid 0:50 -streamid 1:52 -bsf:v h264_mp4toannexb -s 1920x1080 -r 70 -t 14 -crf 30 -f mpegts out_with_pids.ts
+
+(-fflags +genpts)?
+
+ffmpeg.exe -loop 1 -f image2 -i images\image%03d.png -c:v libx264 -s 1920x1080 -crf 30 -t 20 -vf "fps=60, format=yuv420p" out_clock.mp4
