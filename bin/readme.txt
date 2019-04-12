@@ -52,4 +52,7 @@ ffmpeg.exe -loop 1 -f image2 -i images\image%03d.png -c:v libx264 -s 1920x1080 -
 -fflags +genpts generates points for streams, dont understand it myself
 
 extracting frames from the video
+be careful with video length 'cause ffmpeg parses the entire video to find needed frames
 ffmpeg.exe -i out_clock.mp4 -r 1 clock_frame%03d.png
+
+ffmpeg.exe -stream_loop -1 -i hd_test.mp4 -map 0:v -vcodec copy -bsf:v h264_mp4toannexb -f h264 - | ffmpeg.exe -framerate 25 -fflags +genpts -r 25 -re -i - -c:a aac -shortest -vf drawtext=fontfile=verdana.ttf:fontsize=12:text='TelevisionResearchInsitute':fontcolor=white@0.9:x=20:y=20:shadowcolor=black:shadowx=2:shadowy=1,drawtext=fontfile=verdana.ttf:fontsize=120:text='FFMPEG--FUCKING--WORKS':fontcolor=white@0.9:x=(w-tw)/2:y=540:shadowcolor=black:shadowx=2:shadowy=1 -vcodec libx264 -preset veryfast -pix_fmt yuv420p -strict -2 -y -f mpegts -r 25 -t 20 out_tri.mp4
